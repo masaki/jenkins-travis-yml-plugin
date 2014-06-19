@@ -51,8 +51,7 @@ class TravisYmlBuilder < Jenkins::Tasks::Builder
 
   def generate_travis_yml_runner(dir)
     file = dir.join(".travis.yml")
-    yaml = file.native.readToString() # XXX: need Jenkins::FilePath#read
-    conf = YAML.load(yaml)
+    conf = YAML.load(file.read)
 
     script = generate_script(dir, conf, %w[ before_install install before_script script after_script ])
 
