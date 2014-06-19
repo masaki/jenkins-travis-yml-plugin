@@ -1,1 +1,4 @@
+jar/
+pkg/
 work/
+Gemfile.lock
