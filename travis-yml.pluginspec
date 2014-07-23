@@ -1,7 +1,7 @@
 Jenkins::Plugin::Specification.new do |plugin|
   plugin.name = "travis-yml"
   plugin.display_name = "Travis YAML Plugin"
-  plugin.version = '0.0.1'
+  plugin.version = '0.1.0'
   plugin.description = 'Run job using .travis.yml'
 
   plugin.url = 'https://github.com/masaki/jenkins-travis-yml-plugin'

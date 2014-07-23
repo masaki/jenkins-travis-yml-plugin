@@ -1,6 +1,6 @@
 # travis-yml plugin for Jenkins
 
-TODO: Purpose and awesomeness when finished.
+Run Jenkins build step using .travis.yml
 
 ## Development
 
