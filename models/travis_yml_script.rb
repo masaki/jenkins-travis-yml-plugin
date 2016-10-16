@@ -1,4 +1,5 @@
 require 'yaml'
+require 'shellwords'
 
 class TravisYmlScript
   def initialize(attrs = {})
@@ -91,7 +92,7 @@ class TravisYmlScript
   end
 
   def echo(cmd)
-    run("echo '$ #{cmd}'")
+    run("echo $" + Shellwords.shellescape(cmd))
   end
 
   def capture_result
