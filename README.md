@@ -4,8 +4,12 @@ Run Jenkins build step using .travis.yml
 
 ## Development
 
-For development and to see this plugin in a test Jenkins server:
+Prerequisites Ruby and bundler
+```
+gem install bundler
+```
 
+For development and to see this plugin in a test Jenkins server:
 ```
 $ bundle install
 $ jpi server

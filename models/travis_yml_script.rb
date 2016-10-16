@@ -23,25 +23,25 @@ class TravisYmlScript
   private
 
   def header
-    return <<__HEADER__
-#!/usr/bin/env bash
+    return << __HEADER__
+              #!/usr/bin/env bash
 
-capture_result() {
-  local result=$1
-  export TRAVIS_JENKINS_RESULT=$(( ${TRAVIS_JENKINS_RESULT:-0} | $(($result != 0)) ))
-}
+              capture_result() {
+                local result=$1
+                export TRAVIS_JENKINS_RESULT=$(( ${TRAVIS_JENKINS_RESULT:-0} | $(($result != 0)) ))
+              }
 
-export CI=1
-export CONTINUOUS_INTEGRATION=1
-export TRAVIS_JENKINS_RESULT=0
+              export CI=1
+              export CONTINUOUS_INTEGRATION=1
+              export TRAVIS_JENKINS_RESULT=0
 
-__HEADER__
+              __HEADER__
   end
 
   def footer
-    return <<__FOOTER__
-exit $TRAVIS_JENKINS_RESULT
-__FOOTER__
+    return << __FOOTER__
+              exit $TRAVIS_JENKINS_RESULT
+              __FOOTER__
   end
 
   def reset
@@ -91,7 +91,7 @@ __FOOTER__
   end
 
   def echo(cmd)
-    run("echo $ #{cmd}")
+    run("echo '$ #{cmd}'")
   end
 
   def capture_result
