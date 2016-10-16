@@ -5,13 +5,14 @@ class TravisYmlScript
   def initialize(attrs = {})
     @cmds = []
     @file = attrs[:file]
+    @environment = attrs[:environment]
   end
 
   def build
     reset
 
     conf = YAML.load(@file.read)
-
+    expand_env(@environment)
     build_env(conf)
     build_proc(conf)
     build_post_proc(conf)
@@ -24,7 +25,7 @@ class TravisYmlScript
   private
 
   def header
-    return << __HEADER__
+    return %{
               #!/usr/bin/env bash
 
               capture_result() {
@@ -35,18 +36,23 @@ class TravisYmlScript
               export CI=1
               export CONTINUOUS_INTEGRATION=1
               export TRAVIS_JENKINS_RESULT=0
-
-              __HEADER__
+            }
   end
 
   def footer
-    return << __FOOTER__
+    return %{
               exit $TRAVIS_JENKINS_RESULT
-              __FOOTER__
+            }
   end
 
   def reset
     @cmds = []
+  end
+
+  def expand_env(env)
+    env.each do |key,value|
+      export(key+"="+Shellwords.shellescape(value))
+    end
   end
 
   def build_env(conf)
