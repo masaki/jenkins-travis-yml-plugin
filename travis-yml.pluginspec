@@ -1,11 +1,11 @@
 Jenkins::Plugin::Specification.new do |plugin|
   plugin.name = "travis-yml"
   plugin.display_name = "Travis YML Plugin"
-  plugin.version = '0.1.0'
+  plugin.version = '0.2.0'
   plugin.description = 'Run Jenkins builds using .travis.yml in your project'
 
   plugin.url = 'https://wiki.jenkins-ci.org/display/JENKINS/Travis+YML+Plugin'
-  
+
   plugin.developed_by "ikasam_a", "masaki.nakagawa@gmail.com"
   plugin.developed_by "kanekotic", "kanekotic <alvarojosepl@gmail.com>"
 
