@@ -5,7 +5,10 @@ Jenkins::Plugin::Specification.new do |plugin|
   plugin.description = 'Run Jenkins builds using .travis.yml in your project'
 
   plugin.url = 'https://wiki.jenkins-ci.org/display/JENKINS/Travis+YML+Plugin'
+  
   plugin.developed_by "ikasam_a", "masaki.nakagawa@gmail.com"
+  plugin.developed_by "kanekotic", "kanekotic <alvarojosepl@gmail.com>"
+
   plugin.uses_repository :github => "travis-yml-plugin"
 
   plugin.depends_on 'ruby-runtime', '0.10'
