@@ -23,7 +23,7 @@ class TravisYmlBuilder < Jenkins::Tasks::Builder
   def perform(build, launcher, listener)
     ws = build.workspace
 
-    script = TravisYmlScript.new(:file => ws.join(".travis.yml"))
+    script = TravisYmlScript.new(:file => ws.join(".travis.yml"), :environment => build.native.getEnvironment)
     script.build
 
     now = Time.now.instance_eval { '%s.%03d' % [ strftime('%Y%m%d%H%M%S'), (usec/1000.0).round ] }
