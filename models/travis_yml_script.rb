@@ -1,19 +1,22 @@
 require 'yaml'
+require 'shellwords'
 
 class TravisYmlScript
   def initialize(attrs = {})
     @cmds = []
     @file = attrs[:file]
+    @environment = attrs[:environment]
   end
 
   def build
     reset
 
     conf = YAML.load(@file.read)
-
+    expand_env(@environment)
     build_env(conf)
-    build_proc(conf)
-    build_post_proc(conf)
+    build_proc(%w[before_install install before_script script], conf)
+    build_result(conf)
+    build_proc(%w[before_deploy deploy after_deploy after_script], conf)
   end
 
   def to_s
@@ -23,29 +26,34 @@ class TravisYmlScript
   private
 
   def header
-    return <<__HEADER__
-#!/usr/bin/env bash
+    return %{
+              #!/usr/bin/env bash
 
-capture_result() {
-  local result=$1
-  export TRAVIS_JENKINS_RESULT=$(( ${TRAVIS_JENKINS_RESULT:-0} | $(($result != 0)) ))
-}
+              capture_result() {
+                local result=$1
+                export TRAVIS_JENKINS_RESULT=$(( ${TRAVIS_JENKINS_RESULT:-0} | $(($result != 0)) ))
+              }
 
-export CI=1
-export CONTINUOUS_INTEGRATION=1
-export TRAVIS_JENKINS_RESULT=0
-
-__HEADER__
+              export CI=1
+              export CONTINUOUS_INTEGRATION=1
+              export TRAVIS_JENKINS_RESULT=0
+            }
   end
 
   def footer
-    return <<__FOOTER__
-exit $TRAVIS_JENKINS_RESULT
-__FOOTER__
+    return %{
+              exit $TRAVIS_JENKINS_RESULT
+            }
   end
 
   def reset
     @cmds = []
+  end
+
+  def expand_env(env)
+    env.each do |key,value|
+      export(key+"="+Shellwords.shellescape(value))
+    end
   end
 
   def build_env(conf)
@@ -54,32 +62,32 @@ __FOOTER__
     end
   end
 
-  def build_proc(conf)
-    %w[ before_install install before_script script after_script ].each do |k|
+  def builder(phases,conf, &commandList)
+    phases.each do |k|
       values(conf, k).each do |cmd|
         run_if("$TRAVIS_JENKINS_RESULT -eq 0") do
-          echo(cmd)
-          run(cmd)
-          capture_result
+          commandList.call(cmd)
         end
       end
     end
   end
 
-  def build_post_proc(conf)
-    values(conf, "after_success").each do |cmd|
-      run_if("$TRAVIS_JENKINS_RESULT -eq 0") do
-        echo(cmd)
-        run(cmd)
-      end
-    end
+  def build_proc(phases,conf)
+    builder(phases,
+          conf){ |cmd|
+            echo(cmd)
+            run(cmd)
+            capture_result
+          }
+  end
 
-    values(conf, "after_failure").each do |cmd|
-      run_if("$TRAVIS_JENKINS_RESULT -ne 0") do
-        echo(cmd)
-        run(cmd)
-      end
-    end
+  def build_result(conf)
+    builder(%w[after_success after_failure],
+          conf){ |cmd|
+            echo(cmd)
+            run(cmd)
+            capture_result
+          }
   end
 
   def values(conf, key)
@@ -91,7 +99,7 @@ __FOOTER__
   end
 
   def echo(cmd)
-    run("echo $ #{cmd}")
+    run("echo $" + Shellwords.shellescape(cmd))
   end
 
   def capture_result
