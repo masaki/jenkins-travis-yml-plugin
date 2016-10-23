@@ -52,7 +52,7 @@ class TravisYmlScript
 
   def expand_env(env)
     env.each do |key,value|
-      export(key+"="+Shellwords.shellescape(value))
+      export(key.gsub(/[^\w]/, '_')+"="+Shellwords.shellescape(value))
     end
   end
 
@@ -99,7 +99,7 @@ class TravisYmlScript
   end
 
   def echo(cmd)
-    run("echo $" + Shellwords.shellescape(cmd))
+    run("echo " + Shellwords.shellescape(cmd))
   end
 
   def capture_result
