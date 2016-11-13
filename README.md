@@ -5,7 +5,7 @@ This plugin has been done to be able to have certain level of compatibility in b
 ## Use
 Install by navigating and selecting `Manage Jenkins` -> `Manage Plugins` -> `Travis YML Plugin`
 
-Add to your workspace on the root folder a .travis.yml, this plugin accepst the next phases of lifecicle:
+Add to your workspace on the root folder a .travis.yml, this plugin accept the next phases of lifecycle:
 
 1. before_install
 2. install
@@ -18,7 +18,7 @@ Add to your workspace on the root folder a .travis.yml, this plugin accepst the 
 9. after_deploy
 10. after_script
 
-if you have any failire on your build and want to review the final generated, you should declare the enviroment variable `` either on your node or in jenkins.
+If you have any failure on your build and want to review the final generated, you should declare the environment variable `DEBUG_TRAVIS_YML` either on your build node or in jenkins.
 
 ## Development
 
