@@ -1,6 +1,6 @@
 # ![logomakr_5059hu](https://cloud.githubusercontent.com/assets/3071208/20248819/1e3637aa-a9ec-11e6-89b7-6c9c403af3c7.png)
 
-This plugin has been done to be able to have certain level of compatibility in between Jenkinsm travis and other YML based build services.
+This plugin has been done to be able to have certain level of compatibility in between Jenkins, Travis-CI and other YML based build services.
 
 ## Use
 Install by navigating and selecting `Manage Jenkins` -> `Manage Plugins` -> `Travis YML Plugin`
@@ -17,6 +17,8 @@ Add to your workspace on the root folder a .travis.yml, this plugin accepst the 
 8. deploy
 9. after_deploy
 10. after_script
+
+if you have any failire on your build and want to review the final generated, you should declare the enviroment variable `` either on your node or in jenkins.
 
 ## Development
 
