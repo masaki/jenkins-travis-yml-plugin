@@ -30,16 +30,18 @@ class TravisYmlBuilder < Jenkins::Tasks::Builder
     runner = ws.join("hudson.#{now}.sh")
     runner.native.write(script.to_s, nil) # XXX: need Jenkins::FilePath#write
 
-    ret = execute_script!(launcher, runner, { :chdir => ws, :out => listener })
+    ret = execute_script!(launcher, runner, { :chdir => ws, :out => listener }, build.native.getEnvironment)
     build.abort unless ret == 0
   end
 
   private
 
-  def execute_script!(launcher, script, opts)
+  def execute_script!(launcher, script, opts, envars)
     if script && script.exist?
       ret = execute_script(launcher, script, opts)
-      script.delete
+      if [nil, "false"].include?(envars["DEBUG_TRAVIS_YML"]) 
+        script.delete
+      end
       ret
     end
   end
